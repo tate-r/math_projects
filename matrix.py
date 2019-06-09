@@ -1,6 +1,9 @@
 import sys
-import matplotlib.pyplot as plot
-
+try:
+        import matplotlib.pyplot as plot
+except ImportError:
+        print("matplotlib for python 3.5 has not been installed. Try 'sudo pip3 install matplotlib'")
+        
 def begin_plot():
         global points
         points=[]
