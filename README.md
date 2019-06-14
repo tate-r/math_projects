@@ -2,7 +2,6 @@
 
 author: tate-r
 
-
     Matrix.py is made for python3.5 or newer.
 
 PLEASE NOTE : Be aware that "floats" are sometimes used in place in place
