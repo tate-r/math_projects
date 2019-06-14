@@ -1,17 +1,15 @@
 		MATRIX.PY
 
-author:Tate Rowney
+author: tate-r
 
 
-    Matrix.py is made for both python2.7 & python3.5. For the python3 
-version, the file is called "matrixpy3.py". Otherwise, the commands are the
-same.
+    Matrix.py is made for python3.5 or newer.
 
 PLEASE NOTE : Be aware that "floats" are sometimes used in place in place
 of "ints" throughout the libraries.
 
 
-	    Matrix.py covers the following areas; VECTORS, MATRICIES and
+	    matrix.py covers the following areas; VECTORS, MATRICIES and
 	PLOTTING with the matplotlib library. All these are described below.
 
 
@@ -266,3 +264,16 @@ of "ints" throughout the libraries.
                               ________
 
 	This program uses matplotlib to plot vectors.
+
+	To plot a vector, simply do the following:
+	
+		>>> v=Vector([3,4])
+		>>> plotter.plot(v)
+		
+	A matplotlib window will appear with a colored line marking the vector.
+	
+	Bear in mind that te "plot" function can take mulitple inputs, and hence 
+	is useful for seeing the effects of a matrix on vectors:
+	
+		>>> plotter.plot(v1 , m*v1 , v2 , m*v2)
+		
