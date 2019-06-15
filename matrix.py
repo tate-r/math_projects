@@ -68,22 +68,11 @@ class Vector:
                                 ret.append(c/other)
                         return Vector(ret)
                 raise TypeError()
-
-class Matrix:
-        def __init__(self,ref=0,affine=None):
-                self.type='matrix'
-                if(ref==0):
-                        h=input('enter height of matrix :')
-                        self.matrix=[]
-                                     return other*self
-                raise TypeError()
-        def __div__(self,other):
-                if type(other)==int:
-                        ret=[]
-                        for c in self.coords:
-                                ret.append(c/other)
-                        return Vector(ret)
-                raise TypeError()
+        def __abs__(self):
+                sum=0
+                for c in self.coords:
+                        sum+=c**2
+                return sum**0.5
 
 class Matrix:
         def __init__(self,ref=0,affine=None):
