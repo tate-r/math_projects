@@ -14,7 +14,7 @@ PLOTTING with the matplotlib library. All these are described below.
 -----------------------------------------------------------------------------
 
 				VECTORS
-                                _______
+                            _______
 
 To create a vector object, type the following code:
 
@@ -55,7 +55,7 @@ algebra. Adding can be performed as follows:
 		>>> print(v1 + v2)
 		vector [6,8] in dimention R2
 
--			  OR
+OR
 
 		>>> new_vec = v2 + v1
 		>>> print(new_vec)	
@@ -68,7 +68,7 @@ Subtracting works on the same principle:
 		>>> print(v1 - v2)
 		vector [-2,-2] in dimention R2
 
-We can use the '*' symbol to scale the vector (essentially making 
+We can use the "*" symbol to scale the vector (essentially making 
 it reach farther). Here is an example:
 
 		>>> V=Vector([5,5])
