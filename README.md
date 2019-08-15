@@ -100,9 +100,9 @@ algebra:
 		  File "<stdin>", line 1, in <module>
 		  File "matrixpy3.py", line 23, in __add__
 		    raise TypeError('in vector addition , both elements must be
- 		    vectors of the same dimention')
+		     vectors of the same dimention')
 		TypeError: in vector addition , both elements must be vectors of
- 		    the same dimention
+		     the same dimention
 
 The same happens with subtraction. Multiplication of two vectors is 
 impossible.
@@ -139,7 +139,7 @@ To reference the components of a matrix, do the following:
 
 We can get individual items of the matrix like so:
 
-		>>> print(my_matrix[1][0])
+		>>> print(my_matrix[1,0])
 		3
 
 where the first index is the horizontal row and the second is the

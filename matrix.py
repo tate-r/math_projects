@@ -29,8 +29,10 @@ class Vector:
                 self.coords=pts
                 self.dim='R'+str(len(pts))
                 self.type='vector'
+        def __getitem__(self,index):
+                return self.coords[index]
         def __len__(self):
-                return self.coords
+                return len(self.coords)
         def __str__(self):
                 return 'vector '+str(self.coords)+' in dimention '+self.dim
         def __repr__(self):
@@ -43,7 +45,7 @@ class Vector:
                                         for i in range(len(self)):
                                                 ret.append(self.coords[i]+other.coords[i])
                                         return Vector(ret)
-                raise TypeError('in vector addition , both elements must be vectors of the same dimention')
+              raise TypeError('in vector addition , both elements must be vectors of the same dimention')
         def __sub__(self,other):
                 if type(other)==type(self):
                         if other.type==self.type:
@@ -59,10 +61,14 @@ class Vector:
                         for c in self.coords:
                                 ret.append(c*other)
                         return Vector(ret)
-                elif type(other) == type(IDENTITY):
+                elif type(other) == type(Matrix([[1,2],[3,4]])):
                         if other.type=='matrix':
                                 return other*self
-                raise TypeError()
+                elif type(self)==type(other):
+                        return mul_obj(self,other)
+                elif type(other)==type(mul_obj(Vector([1,1,1]),Vector([1,1,1]))):
+                        return other*self
+                raise TypeError('In vector multiplication, a vector must be multiplied by another vector, a scaler (int or float), or a matrix, not %s'% str(type(other)))
         def __div__(self,other):
                 if type(other)==int:
                         ret=[]
@@ -76,10 +82,68 @@ class Vector:
                         sum+=c**2
                 return sum**0.5
 
+class mul_obj:
+	def __init__(self,v1,v2):
+		self.components=[v1,v2]
+		if type(v1)==type(self) and type(v2)==type(Vector([1,1])):
+			val=list(v1)+[v2.coords]
+#			print(val)
+			self.cross_product=self.x_prod(*val)
+			self.components=val
+		elif type(v1)== type(self) and type(v2)== type(self):
+			val=[*list(v1),*list(v2)]
+			self.cross_product=self.x_prod(*val)
+			self.components=val
+		else:
+			v1=v1.coords
+			v2=v2.coords
+			self.components=[v1,v2]
+			self.cross_product=self.x_prod(v1,v2)
+			self.dot_product=self.dot_prod(v1,v2)
+			self.outer_product=self.O_prod(v1,v2)
+	def __list__(self):
+		return self.components
+	def __getitem__(self,index):
+		return self.components[index]
+	def __mul__(self,other):
+		if type(other) == type(Vector([1,1])) or type(other) == type(self):
+			return mul_obj(self,other)
+		else:
+			raise TypeError
+	def x_prod(self,*args):
+		val=len(args[0])
+		for a in args:
+			if len(a) != val:
+				return None
+#				raise TypeError('For a cross product, all vectors must be of the smae dimention')
+		if val != len(args)+1:
+			return None
+		vectors=getBasisVectors(len(args)+1)
+		ret=[[]*1 for k in range(len(args)+1)]
+		for i in range(len(ret)):
+			ret[0].append(vectors[i])
+		for row in range(1,len(ret)):
+			for elem in range(len(args[0])):
+				ret[row].append(args[row-1][elem])
+		return det(Matrix(ret))
+	def dot_prod(self,v1,v2):
+		if len(v1) != len(v2):
+			return None
+		sum=0
+		for u,v in zip(v1,v2):
+			sum+=u*v
+		return sum
+	def O_prod(self,v1,v2):
+		ret=[[]*1 for i in range(len(v1))]
+		for i in range(len(v1)):
+			for j in range(len(v2)):
+				ret[i].append(v1[i]*v2[j])
+		return Matrix(ret)
+
 class Matrix:
         def __init__(self,ref=0,affine=None):
                 self.type='matrix'
-                if(ref==0):
+                if ref == 0:
                         h=input('enter height of matrix :')
                         self.matrix=[]
                         for i in range(0,h):
@@ -97,7 +161,7 @@ class Matrix:
                         for i in range(len(ref)):
                                 self.matrix.append([])
                                 for j in range(len(ref[i])):
-                                        self.matrix[i].append(float(ref[i][j]))
+                                        self.matrix[i].append(ref[i][j])
                 self.width=len(self.matrix[0])
                 self.height=len(self.matrix)
                 self.rows=self.matrix
@@ -113,7 +177,7 @@ class Matrix:
 #                               vals=[]
 #                                vals=input("line %s of matrix :" %eval("i+1"))
 #                                if i==0:
-       def apply(self,vector,mod=0):
+        def apply(self,vector,mod=0):
                 vector=vector.coords
                 if len(vector)!=self.height:
                         raise TypeError('vector of length %s is not compatable with a matrix of height %s'% (str(len(vector)),str(self.height)))
@@ -134,7 +198,7 @@ class Matrix:
         def __getitem__(self,index1):
                 return self.matrix[index1]
         def __eq__(self,other):
-                if type(other) == type(IDENTITY):
+                if type(other) == type(Matrix([[1,1],[1,1]])):
                         if self.type==other.type:
                                 if self.matrix == other.matrix:
                                         return True
@@ -159,7 +223,7 @@ class Matrix:
                         return self._mul_const(float(other))
                 elif type(self) == int or type(self) == float:
                         other._mul_const(float(self))
-                elif type(other) == type(IDENTITY):
+                elif type(other) == type(Matrix([[1,1],[1,1]])):
                         if other.type == 'matrix':
                                 return _mul(self,other)
                 elif type(other) == type(Vector([0,0])):
@@ -187,10 +251,31 @@ class Matrix:
                         ret*=ret
                 return ret
         def __len__(self):
-                print(str(self.width)+' by '+str(self.height))
+#                print(str(self.width)+' by '+str(self.height))
                 return len(self.matrix) * len(self.matrix[0])
+        def __list__(self):
+                return self.coords
+def det(m):
+        return getMatrixDeternminant(list(m))
 
-IDENTITY=Matrix([[1,0],[0,1]])
+class ids:
+	def __getitem__(self,index):
+		return Matrix(GBV(index))
+
+IDENTITIES=ids()
+
+def GBV(dim):
+	ret=[]
+	for i in range(dim):
+		ret.append([0]*dim)
+		ret[i][i]=1
+	return ret
+
+def getBasisVectors(dim):
+	ret=[]
+	for v in GBV(dim):
+		ret.append(Vector(v))
+	return ret
 
 def transposeMatrix(m):
         return map(list,zip(*m))
@@ -200,13 +285,22 @@ def getMatrixMinor(m,i,j):
 
 def getMatrixDeternminant(m):
         #base case for 2x2 matrix
-#       print(len(m),len(m[0]))
         if len(m) == 2:
                 return m[0][0]*m[1][1]-m[0][1]*m[1][0]
         determinant = 0
+        vec_det=Vector([0]*len(m))
+        val=1
         for c in range(len(m)):
-                determinant += ((-1)**c)*m[0][c]*getMatrixDeternminant(getMatrixMinor(m,0,c))
-        return determinant
+                if type(m[0][c]*getMatrixDeternminant(getMatrixMinor(m,0,c))*((-1)**c))==int:
+                        val=0
+                        determinant += m[0][c]*getMatrixDeternminant(getMatrixMinor(m,0,c))*((-1)**c)
+                else:
+                        vec_det += m[0][c]*getMatrixDeternminant(getMatrixMinor(m,0,c))*((-1)**c)
+
+        if val==0:
+                return determinant
+        else:
+                return vec_det
 
 def getMatrixInverse(m):
         if len(m) != len(m[0]):
@@ -244,7 +338,7 @@ def _add(MI,MII,mode=0):
                                         ls.append(z)
                                 else:
                                         rval[i][j]=z
-                        if(mode==0):
+                        if mode==0:
                                 print(ls)
                                 ls=[]
                 if mode==1 :
@@ -278,3 +372,14 @@ def _mul(_m1,_m2):
                         ret[i].append(float(val))
         ret=Matrix(ret)
         return ret
+
+if __name__ == '__main__':
+#        m=Matrix([[Vector([1,0,0]),Vector([0,1,0]),Vector([0,0,1])],[3,4,5],[1,2,3]])
+#        print(getBasisVectors(4))
+#        M=mul_obj(Vector([1,2,3,4]),Vector([6,5,5,6]))*Vector([-7,-8,-9,-10])
+#        print(M.cross_product)
+#        M=mul_obj(Vector([1,2,3,4,5]),Vector([3,4,5,6,7]))*mul_obj(Vector([1,2,3,4,5]),Vector([3,4,5,6,7]))
+#        print(M.cross_product)
+        print((Vector([1,5,7])*Vector([6,3,4])).cross_product)
+        print((Vector([1,5,7])*Vector([6,3,4])).dot_product)
+        print((Vector([1,2,3,4])*Vector([6,5,5,6])*Vector([-7,-8,-9,-10])).cross_product)
