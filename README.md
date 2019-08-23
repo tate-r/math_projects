@@ -104,8 +104,8 @@ algebra:
 		TypeError: in vector addition , both elements must be vectors of
 		     the same dimention
 
-The same happens with subtraction. Multiplication of two vectors is 
-impossible.
+The same happens with subtraction. Multiplication of two vectors has 
+yet to be implemented.
 
 ------------------------------------------------------------------------
 
