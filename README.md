@@ -7,7 +7,7 @@ Matrix.py is made for python3.5 or newer.
 PLEASE NOTE : Be aware that "floats" are sometimes used in place in place
 of "ints" throughout the libraries.
 
-  matrix.py covers the following areas; VECTORS, MATRICIES and
+  matrix.py covers the following areas; VECTORS, MATRICES and
 PLOTTING with the matplotlib library. All these are described below.
 
 
@@ -109,7 +109,7 @@ yet to be implemented.
 
 ------------------------------------------------------------------------
 
-			      MATRICIES
+			      MATRICES
 			      _________
 
 A matrix is a transformation that is applied to a vector. It can
@@ -167,7 +167,7 @@ or the second column like this:
 
 This is done from left to right and top to bottom.
 
-Of course, the purpose of matricies is to use them as transformations
+Of course, the purpose of matrices is to use them as transformations
 on vectors. This can be done quite simply:
 
 		>>> vec=Vector([2,3])
@@ -184,7 +184,7 @@ wrong sized vector, you will see an error like this:
 		   TypeError: vector of length 3 is not compatable with a 
 		matrix of height 2
 
-Matricies are so useful because they are versatile; specificly, we
+Matrices are so useful because they are versatile; specificly, we
 can add, subtract, multiply, divide and exponentiate them. To do 
 this, we can use the normal operations that we use on integers:
 
@@ -210,7 +210,7 @@ this, we can use the normal operations that we use on integers:
 		[18.0, 18.0]
 		[18.0, 18.0]
 
-Be aware that multiplication is NOT comutitive with two matricies:
+Be aware that multiplication is NOT comutitive with two matrices:
 
 		>>> print(m1 * m2)
 		[30.0, 36.0]
@@ -225,14 +225,14 @@ And that some division problems are not possible:
 		>>> print(m2 / m1)
 		None
 
-Scaling matricies in the same way that we scaled vectors is possible.
+Scaling matrices in the same way that we scaled vectors is possible.
 We can do it in the same way:
 
 		>>> print(m2 * 2)
 		[8.0, 10.0]
 		[12.0,14.0]
 
-Many matricies also have an inverse, such that a vector applied to 
+Many matrices also have an inverse, such that a vector applied to 
 a matrix times that matrix's inverse is equal to the original
 vector. To obtain the inverse of a matrix, the following syntax is
 required:
